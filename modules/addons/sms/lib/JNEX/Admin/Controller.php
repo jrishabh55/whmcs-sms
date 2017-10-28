@@ -29,7 +29,7 @@ class Controller {
         $configRadioField = $vars['Radio Field Name'];
         $configTextareaField = $vars['Textarea Field Name'];
 
-        return <<<EOF
+        return <<<HTML
 
 <h2>Index</h2>
 
@@ -59,7 +59,7 @@ class Controller {
     </a>
 </p>
 
-EOF;
+HTML;
     }
 
     /**
