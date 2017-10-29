@@ -18,71 +18,33 @@ function sms_config()
         'language' => 'english', // Default language
         'version' => '1.0', // Version number
         'fields' => array(
-            'Text Field Name' => array(
-                'FriendlyName' => 'Text Field Name',
+            'sendcloud_sms_user' => array(
+                'FriendlyName' => 'SendCloud SMS USER',
                 'Type' => 'text',
                 'Size' => '25',
-                'Default' => 'Default value',
-                'Description' => 'Description goes here',
             ),
-            // a password field type allows for masked text input
-            'Password Field Name' => array(
-                'FriendlyName' => 'Password Field Name',
-                'Type' => 'password',
+            'sendcloud_sms_key' => array(
+                'FriendlyName' => 'SendCloud SMS KEY',
+                'Type' => 'text',
                 'Size' => '25',
-                'Default' => '',
-                'Description' => 'Enter secret value here',
             ),
-            // the yesno field type displays a single checkbox option
-            'Checkbox Field Name' => array(
-                'FriendlyName' => 'Checkbox Field Name',
-                'Type' => 'yesno',
-                'Description' => 'Tick to enable',
-            ),
-            // the dropdown field type renders a select menu of options
-            'Dropdown Field Name' => array(
-                'FriendlyName' => 'Dropdown Field Name',
-                'Type' => 'dropdown',
-                'Options' => array(
-                    'option1' => 'Display Value 1',
-                    'option2' => 'Second Option',
-                    'option3' => 'Another Option',
-                ),
-                'Description' => 'Choose one',
-            ),
-            // the radio field type displays a series of radio button options
-            'Radio Field Name' => array(
-                'FriendlyName' => 'Radio Field Name',
-                'Type' => 'radio',
-                'Options' => 'First Option,Second Option,Third Option',
-                'Description' => 'Choose your option!',
-            ),
-            // the textarea field type allows for multi-line text input
-            'Textarea Field Name' => array(
-                'FriendlyName' => 'Textarea Field Name',
-                'Type' => 'textarea',
-                'Rows' => '3',
-                'Cols' => '60',
-                'Description' => 'Freeform multi-line text input field',
-            ),
+            'luosimao_api_key' => array(
+                'FriendlyName' => 'Luosimao  KEY',
+                'Type' => 'text',
+                'Size' => '25',
+            )
+
         )
     );
 }
 
-/**
- * Activate.
- *
- * Called upon activation of the module for the first time.
- * Use this function to perform any database and schema modifications
- * required by your module.
- *
- * This function is optional.
- *
- * @return array Optional success/failure message
- */
+
 function sms_activate()
 {
-    DB::table('tbladdonmodules')->insert([ 'module' => JNEX_MODULE_NAME, 'setting' => 'access', 'value' => 1 ]);
+    DB::table('tbladdonmodules')->insert([ 'module' => JNEX_SMS_MODULE_NAME, 'setting' => 'access', 'value' => 1 ]);
+    DB::settingTables();
+    DB::addHook();
+    DB::addProvider();
 
 
     return array(
@@ -105,8 +67,8 @@ function sms_activate()
 function sms_deactivate()
 {
     // Undo any database and schema modifications made by your module here
-    $query = "DROP TABLE `mod_addonexample`";
-    full_query($query);
+    DB::schema()->dropIfExists(JNEX_SMS_TABLE_TEMPLATES);
+    DB::schema()->dropIfExists(JNEX_SMS_TABLE_PROVIDER);
 
     return array(
         'status' => 'success', // Supported values here include: success, error or info
@@ -176,6 +138,7 @@ function sms_output($vars)
     $dispatcher = new AdminDispatcher();
     $response = $dispatcher->dispatch($action, $vars);
     echo $response;
+
 }
 
 /**

@@ -53,6 +53,7 @@ class Hooks implements Countable, JsonSerializable
     public function __call($name, $args)
     {
         $vars = $args[0];
+        // die($name);
         return $this;
     }
 
